@@ -3,6 +3,9 @@
 # Anisotropic diffusion of 2D image.
 # implemented by t-suzuki.
 # License: Public Domain
+#
+# reference:
+# Pietro Perona, et al. "Scale-Space and Edge Detection Using Anisotropic Diffusion", IEEE TRANSACTIONS ON PATTERN ANALYSIS AND MACHINE INTELLIGENCE, VOL. 12, NO.7, JULY 1990.
 
 import sys
 import skimage.color
@@ -35,7 +38,7 @@ def anisotropic_diffusion(img, N=10, K=-1.0, diffuse_function='exp', verbose=Tru
     for i in range(N):
         if auto_K:
             gx, gy = gradient(I)
-            K = np.sqrt(gx**2.0 + gy**2.0).mean()*0.9
+            K = np.sqrt(gx**2.0 + gy**2.0).mean()*0.9 # constatn 0.9 from the paper.
         W, E, N, S = W_diff(I), E_diff(I), N_diff(I), S_diff(I)
         I_delta = W*g_func(np.abs(W)) + E*g_func(np.abs(E)) + N*g_func(np.abs(N)) + S*g_func(np.abs(S))
         I += mu*I_delta
